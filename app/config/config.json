@@ -1,0 +1,49 @@
+{
+ 
+    "development": {
+ 
+        "username": "root",
+ 
+        "password": "vendorapp",
+ 
+        "database": "ecovolunteerindia",
+ 
+        "host": "localhost",
+ 
+        "dialect": "mysql"
+ 
+    },
+ 
+    "test": {
+ 
+        "username": "admin",
+ 
+        "password": "admin_1234",
+ 
+        "database": "clientvendor",
+ 
+        "host": "sampledatabase.cw8mxkptek9r.ap-south-1.rds.amazonaws.com",
+ 
+        "dialect": "mysql",
+
+        "dialectOptions": {
+            "ssl": "Amazon RDS"
+        }
+ 
+    },
+ 
+    "production": {
+ 
+        "username": "",
+ 
+        "password": null,
+ 
+        "database": "",
+ 
+        "host": "127.0.0.1",
+ 
+        "dialect": "mysql"
+ 
+    }
+ 
+}

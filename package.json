@@ -1,0 +1,36 @@
+{
+  "name": "ecovolunteerindiabackend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node ./server"
+  },
+  "dependencies": {
+    "bcrypt-nodejs": "latest",
+    "body-parser": "^1.15.2",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.3",
+    "dotenv": "^4.0.0",
+    "ejs": "^2.3.2",
+    "express": "^4.16.3",
+    "express-mailer": "^0.3.1",
+    "jsonwebtoken": "^8.2.0",
+    "morgan": "^1.7.0",
+    "mysql": "^2.15.0",
+    "mysql2": "^1.5.3",
+    "randomstring": "^1.1.5",
+    "sequelize": "^4.37.3"
+  },
+  "description": "Hello, this is the Backend Implementation for the Client-Vendor App.",
+  "version": "1.0.0",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ameeakshay/VendorBackend.git"
+  },
+  "author": "Akshay Trivedi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ameeakshay/VendorBackend/issues"
+  },
+  "homepage": "https://github.com/ameeakshay/VendorBackend#readme"
+}
