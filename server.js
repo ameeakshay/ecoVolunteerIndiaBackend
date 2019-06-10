@@ -67,8 +67,8 @@ mailer.extend(app, {
   port: 465, // port for secure SMTP
   transportMethod: 'SMTP', // default is SMTP. Accepts anything that nodemailer accepts
   auth: {
-  user: 'radienerga@gmail.com', // gmail id
-  pass: 'champions@1' // gmail password
+  user: 'lallulangda93@gmail.com', // gmail id
+  pass: 'ameedidi1993' // gmail password
   }
 });
 

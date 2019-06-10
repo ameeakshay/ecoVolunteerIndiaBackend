@@ -14,7 +14,7 @@ exports.login = function(req, res) {
 
     var User = Volunteer;
 
-
+    console.log("this prints...");
     User.findOne({where: { email: req.body.username }}).then(function(user) {
 
         if (!user) {
@@ -39,9 +39,10 @@ exports.login = function(req, res) {
                 var Verify = models.verification;
                 var temp = {};
 
-                Verify.findOne({where: {volunteerId : user.id}}).then(function(verify) {
+                Verify.findOne({where: {volunteerId : user.volunteerId}}).then(function(verify) {
                 
-                    console.log(verify);
+                    //console.log(verify);
+                    console.log(verify.accountVerified);
                     if (!verify.accountVerified) {
 
                         temp = common.ResponseFormat(403, 'Please complete the verification before logging in!', verify)
@@ -53,6 +54,8 @@ exports.login = function(req, res) {
                     tenderPosting = verify.canPostTender;
                     temp = common.ResponseFormat(200, 'User logged in Successfully', {"token": jwt.sign({ email: user.email, id: user.id, type: req.body.type }, 'ClientVendor')});
                     
+                    res.status(temp.status)
+                            .json(temp);
                 });
             }
         }
@@ -64,9 +67,9 @@ exports.signup = function(req, res) {
     var User;
 
     User = Volunteer;
-
+    console.log("This prints...");
     User.findOne({ where: { email: req.body.username }}).then(function(user) {
-
+        console.log("inside finOne");
         if (user)
         {
 
@@ -85,7 +88,7 @@ exports.signup = function(req, res) {
                 volunteerId: random_id, 
                 email: req.body.username,
                 password: userPassword,
-                volunteerName: req.body.name,
+                volunteerName: req.body.volunteerName,
                 phoneNumber: req.body.phoneNumber,
                 bio: req.body.bio,
                 occupation: req.body.occupation
@@ -116,7 +119,7 @@ exports.signup = function(req, res) {
                     }
                     console.log(permalink_local +token);
 
-                    var link = "http://" + req.headers.host + "/verification/" + permalink_local + "/" + token + "/" + newUser.id;
+                    var link = "http://" + req.headers.host + "/verification/" + permalink_local + "/" + token + "/" + newUser.volunteerId;
 
                     var Verification = models.verification;
                     temp.status = 200;
@@ -152,7 +155,7 @@ exports.signup = function(req, res) {
                                 return;
                             }
                             console.log("mail sent");
-                            temp.data = {"id": newUser.id, "email":newUser.email, "type": req.body.type};
+                            temp.data = {"id": newUser.volunteerId, "email":newUser.email, "type": req.body.type};
                             return res.status(temp.status).json(temp);  
                         });
                     
@@ -167,7 +170,7 @@ exports.verify = function(req, res) {
 
     var Verification = models.verification;
 
-    Verification.update({accountVerified : true}, {where :{volunteerId : req.params.id, $and:[
+    Verification.update({accountVerified : true}, {where :{volunteerId : req.params.volunteerId, $and:[
         {permalink : req.params.link}, 
         {verify_token : req.params.token},
         {accountVerified : false}
@@ -181,7 +184,7 @@ exports.verify = function(req, res) {
                         .json(temp);
         }
 
-        temp = common.ResponseFormat(200, 'The email for client ' + req.params.id + ' is verified!', client);
+        temp = common.ResponseFormat(200, 'The email for client ' + req.params.volunteerId + ' is verified!', client);
 
         return res.status(temp.status)
                     .json(temp);
