@@ -28,6 +28,8 @@ app.set('view engine', 'ejs'); // set up ejs for templating
 //Models
 var models = require("./app/models");
 
+models.volEventMap.belongsTo(models.volunteer);
+models.volEventMap.belongsTo(models.event);
 
 //Sync Database
 models.sequelize.sync().then(function() {
