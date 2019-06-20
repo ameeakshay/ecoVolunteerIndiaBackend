@@ -15,7 +15,7 @@ module.exports = function(sequelize, Sequelize) {
  
         eventDate: {
             type: Sequelize.DATE,
-            allowNull: false
+            allowNull: true
         },
 
         eventDescription: {

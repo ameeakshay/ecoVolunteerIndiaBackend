@@ -44,8 +44,8 @@ models.sequelize.sync().then(function() {
 
 app.use(function(req, res, next) {
 
-    if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT'){
-        jwt.verify(req.headers.authorization.split(' ')[1], 'clientvendor', function(err, loggedInUser) {
+    if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer'){
+        jwt.verify(req.headers.authorization.split(' ')[1], 'ecovolunteerindia', function(err, loggedInUser) {
             if (err) {
                 req.user = undefined;
             }

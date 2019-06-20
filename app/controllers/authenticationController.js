@@ -52,7 +52,7 @@ exports.login = function(req, res) {
                     }
 
                     tenderPosting = verify.canPostTender;
-                    temp = common.ResponseFormat(200, 'User logged in Successfully', {"token": jwt.sign({ email: user.email, id: user.id, type: req.body.type }, 'ClientVendor')});
+                    temp = common.ResponseFormat(200, 'User logged in Successfully', {"token": jwt.sign({ email: user.email, id: user.volunteerId }, 'ecovolunteerindia')});
                     
                     res.status(temp.status)
                             .json(temp);
