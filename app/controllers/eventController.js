@@ -22,7 +22,7 @@ exports.add_event = function(req, res) {
             eventDate: req.body.evventDate,
             eventDescription: req.body.eventDescription,
             noOfVolsReq: req.body.noOfVolsReq,
-            noOfVolsReg : '0',
+            noOfVolsReg : 0,
             eventStatus : 'Ongoing'
         };
 
@@ -33,27 +33,21 @@ exports.add_event = function(req, res) {
             if (newEvent) {
 
                 var mapData = {
-                    volunteerId : req.user.volunteerId,
-                    eventId : newEvent.eventId
+                    volunteerVolunteerId : req.user.id,
+                    eventEventId : newEvent.eventId
                 };
 
                 VolEventMap.create(mapData).then(function (newMap) {
                     if (newMap) {
-                        temp.status = 201;
-                        temp.message = 'Successfully created the event';
-                        temp.data = newEvent;
+                        temp = common.ResponseFormat(201, 'Successfully created the event', newEvent);
                     }
                     else {
-                        temp.status = 409;
-                        temp.message = 'Unable to create the map';
-                        temp.data = {};
+                        temp = common.ResponseFormat(409, 'Unable to create the map', {});
                     }
                 });
             }
             else {
-                temp.status = 409;
-                temp.message = 'Unable to create the Event';
-                temp.data = {};
+                temp = common.ResponseFormat(409, 'Unable to create the event', {});   
             }
 
             res.status(temp.status)
@@ -65,6 +59,7 @@ exports.add_event = function(req, res) {
 
 exports.get_events = function(req, res) {
 
+    console.log(req.user);
     temp = common.ResponseFormat(200, '', []);
     Event.findAll().then(function(events) {
         if (events) {

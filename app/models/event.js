@@ -24,12 +24,12 @@ module.exports = function(sequelize, Sequelize) {
         },
 
         noOfVolsReq: {
-            type: Sequelize.STRING,
+            type: Sequelize.INTEGER,
             allowNull: false
         },
 
         noOfVolsReg: {
-            type: Sequelize.STRING,
+            type: Sequelize.INTEGER,
             allowNull: false
         },
 

@@ -115,7 +115,7 @@ exports.signup = function(req, res) {
                         volunteerId : newUser.volunteerId,
                         verify_token : token,
                         permalink : permalink_local,
-                        accountVerified : false
+                        accountVerified : true
                     }
                     console.log(permalink_local +token);
 
@@ -170,23 +170,29 @@ exports.verify = function(req, res) {
 
     var Verification = models.verification;
 
-    Verification.update({accountVerified : true}, {where :{volunteerId : req.params.volunteerId, $and:[
+    Verification.update({accountVerified : true}, {where :{volunteerId : req.params.id, $and:[
         {permalink : req.params.link}, 
         {verify_token : req.params.token},
         {accountVerified : false}
         ]}}).then(function(client) {
-
+        console.log(client);
         if(!client) {
 
             temp = common.ResponseFormat(500, 'Verification Failed!', {});
 
             return res.status(temp.status)
                         .json(temp);
-        }
+        } else if(client == 0){
+            temp = common.ResponseFormat(403, 'Already verified!', {});
 
-        temp = common.ResponseFormat(200, 'The email for client ' + req.params.volunteerId + ' is verified!', client);
-
-        return res.status(temp.status)
+            return res.status(temp.status)
                     .json(temp);
+        }
+        else {
+            temp = common.ResponseFormat(200, 'The email for client ' + req.params.id + ' is verified!', client);
+
+            return res.status(temp.status)
+                    .json(temp);
+        }
     });
 };
