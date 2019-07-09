@@ -1,7 +1,9 @@
 
+var crypto = require('crypto');
 var common = require('../common/common.js');
 var models = require('../models');
 var sequelize = require('sequelize');
+var randomstring = require('randomstring');
 
 exports.get_all_volunteers = function(req, res) {
 
@@ -46,16 +48,8 @@ exports.get_volunteers = function(req, res) {
     var Map = models.volEventMap;
     var Volunteer = models.volunteer;
     var attributes_user = ['volunteerName', 'phoneNumber', 'email', 'bio', 'occupation'];
-
-    if (Map != null) {
-
-        Map.findAll({ where: { eventEventId :  req.params.eventId}}).then(function(user) {
-
-            temp = common.ResponseFormat(200, '', user);
-
-            if (user) {
-                console.log(user);                
-                Volunteer.findAll({ where : { volunteerId : user.volunteerVolunteerId}, attributes : attributes_user }).then(function(vol) {
+             
+                Volunteer.findAll({include : [{model : models.event}]}).then(function(vol) {
                     
                         if (vol) {
                             temp = common.ResponseFormat(200, 'All volunteer details for event ', vol);
@@ -67,14 +61,75 @@ exports.get_volunteers = function(req, res) {
                 res.status(temp.status)
                     .json(temp);   
 
+ 
+};
+
+
+exports.insert_volunteers = function(req, res) {
+
+    Volunteer = models.volunteer;
+
+    req.body.data.forEach(element => {
+        var userPassword = common.generateHash(element.password);
+        const random_id = crypto.randomBytes(16).toString('hex');
+        console.log(random_id);
+    
+        var data = {
+            volunteerId: random_id, 
+            email: element.username,
+            password: userPassword,
+            volunteerName: element.volunteerName,
+            phoneNumber: element.phoneNumber,
+            bio: element.bio,
+            occupation: element.occupation
+        };    
+        temp = common.ResponseFormat(500, '', {});
+        Volunteer.create(data).then(function(newUser) {
+
+            if (!newUser) {
+
+                temp = common.ResponseFormat(200, 'Unable to create the User', []);
             }
-            else {
-                temp = common.ResponseFormat(500, 'Unable to retrieve event info', {});                
-                 
-                res.status(temp.status)
-                    .json(temp);
+
+            if (newUser) {
+
+                temp = common.ResponseFormat(200, 'User created Successfully', newUser);
+
+                var permalink_local = element.username.toLowerCase().replace(' ', '').replace(/[^\w\s]/gi, '').trim();
+
+                var token = randomstring.generate({
+                    length: 64
+                });
+
+                var link_data = {
+                    volunteerId : newUser.volunteerId,
+                    verify_token : token,
+                    permalink : permalink_local,
+                    accountVerified : true
+                }
+
+                console.log(permalink_local +token);
+                var Verification = models.verification;
+                temp.status = 200;
+
+                Verification.create(link_data).then(function(client) {
+
+                    if (!client) {
+                        console.log("error");
+                        temp.message = 'error with verification process';
+                        temp.data = null;
+                    }
+
+                    temp.message = 'Successful Signup and link generated';
+                    temp.data = newUser;
+                    console.log(temp.message);
+                });
+                
             }
-        
+
         });
-    }
+    });
+
+    return res.status(temp.status).json(temp);
+ 
 };

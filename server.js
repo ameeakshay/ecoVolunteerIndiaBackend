@@ -29,7 +29,9 @@ app.set('view engine', 'ejs'); // set up ejs for templating
 var models = require("./app/models");
 
 models.volEventMap.belongsTo(models.volunteer);
+models.volunteer.hasMany(models.event, {through : models.volEventmap, constraints : false});
 models.volEventMap.belongsTo(models.event);
+models.event.hasMany(models.volunteer, {through : models.volEventmap, constraints : false});
 
 //Sync Database
 models.sequelize.sync().then(function() {
