@@ -18,7 +18,7 @@
     "mysql": "^2.15.0",
     "mysql2": "^1.5.3",
     "randomstring": "^1.1.5",
-    "sequelize": "^4.37.3"
+    "sequelize": "^5.15.1"
   },
   "description": "Hello, this is the Backend Implementation for the Client-Vendor App.",
   "version": "1.0.0",
